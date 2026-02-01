@@ -60,17 +60,16 @@ with tab1:
         columns.append('女性')
 
     st.dataframe(
-        df_display[columns],
-        use_container_width=True
-    )
+    df_display[columns],
+    use_container_width=True,
+    hide_index=True)
     
     # ダウンロード機能（st.download_button使用）
     st.download_button(
         '表示中のデータをCSVファイルでダウンロード',
         df_display[columns].to_csv(index=False),
         'average_lifespan_filtered.csv',
-        'text/csv'
-    )
+        'text/csv')
 
 # グラフ表示
 with tab2:
