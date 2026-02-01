@@ -29,10 +29,11 @@ df_filtered = df[df['era'].isin(era)]
 # 見出し表示（st.metric使用）
 col1, col2 = st.columns(2)
 
+# 選択したデータ範囲によって表示を変化
 if '男性' in gender:
     col1.metric(
         '男性の平均寿命（選択期間平均）',
-        f"{df_filtered['man'].mean():.2f} 歳") # 選択したデータ範囲によって表示を変化
+        f"{df_filtered['man'].mean():.2f} 歳")
 
 if '女性' in gender:
     col2.metric(
@@ -62,7 +63,7 @@ with tab1:
     st.dataframe(
     df_display[columns],
     use_container_width=True,
-    hide_index=True)
+    hide_index=True) # 表左端の整数列を非表示
     
     # ダウンロード機能（st.download_button使用）
     st.download_button(
@@ -77,6 +78,7 @@ with tab2:
 
     fig, ax = plt.subplots()
 
+    # 選択したデータ範囲によって表示を変化
     if '男性' in gender:
         ax.plot(df_filtered['year'], df_filtered['man'], label='男性')
 
