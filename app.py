@@ -1,7 +1,12 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
+
+# 日本語フォント設定（文字化け対策）
+plt.rcParams['font.family'] = 'MS Gothic'
 
 st.title('日本の平均寿命')
+st.subheader('年号・性別を選択して平均寿命の推移を確認できます')
 
 # CSVファイル読み込み
 df = pd.read_csv('JP_AverageLifespan.csv')
@@ -21,7 +26,7 @@ with st.sidebar:
 # データ抽出
 df_filtered = df[df['era'].isin(era)]
 
-# 見出し表示
+# 見出し表示（st.metric使用）
 col1, col2 = st.columns(2)
 
 if '男性' in gender:
@@ -34,7 +39,7 @@ if '女性' in gender:
         '女性の平均寿命（選択期間平均）',
         f"{df_filtered['woman'].mean():.2f} 歳")
 
-# タブ表示
+# タブ表示（st.tab使用）
 tab1, tab2 = st.tabs(['表', 'グラフ'])
 
 # 表
@@ -58,7 +63,8 @@ with tab1:
         df_display[columns],
         use_container_width=True
     )
-
+    
+    # ダウンロード機能（st.download_button使用）
     st.download_button(
         '表示中のデータをCSVファイルでダウンロード',
         df_display[columns].to_csv(index=False),
@@ -66,9 +72,21 @@ with tab1:
         'text/csv'
     )
 
+# グラフ表示
+with tab2:
+    st.subheader('平均寿命の推移')
 
+    fig, ax = plt.subplots()
 
+    if '男性' in gender:
+        ax.plot(df_filtered['year'], df_filtered['man'], label='男性')
 
+    if '女性' in gender:
+        ax.plot(df_filtered['year'], df_filtered['woman'], label='女性')
 
+    ax.set_xlabel('年')
+    ax.set_ylabel('平均寿命（歳）')
+    ax.legend()
+    ax.grid(True)
 
-
+    st.pyplot(fig)
